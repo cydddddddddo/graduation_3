@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
  */
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class ResultObj {
     public static final ResultObj  LOGIN_SUCCESS=new ResultObj(Constast.OK, "登陆成功");
@@ -21,8 +22,8 @@ public class ResultObj {
     private Integer code;
     private String msg;
 
-    public ResultObj(Integer code, String msg) {
+    /*public ResultObj(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
-    }
+    }*/
 }

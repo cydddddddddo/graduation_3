@@ -1,6 +1,7 @@
 package com.example.graduation_3.common;
 
 /**
+ * 常量接口
  * @author Cy
  * @data 2020/4/30 - 17:18
  */

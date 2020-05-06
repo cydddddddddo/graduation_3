@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-@MapperScan(basePackages = "com.example.graduation_3.dao")
+@MapperScan(basePackages = "com.example.graduation_3.mapper")
 @SpringBootApplication
 public class Graduation3Application {
 
