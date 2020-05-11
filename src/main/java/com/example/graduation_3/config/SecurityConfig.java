@@ -44,6 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.logout().logoutSuccessUrl("/sys/toLogin");
         //记住账号功能
         //http.rememberMe();
+
+        http.headers().frameOptions().sameOrigin();
     }
 
     /**

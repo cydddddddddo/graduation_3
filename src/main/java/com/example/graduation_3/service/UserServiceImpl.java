@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @data 2020/4/30 - 22:11
  */
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService{
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -26,6 +26,7 @@ public class UserServiceImpl {
      * @param name
      * @return
      */
+    @Override
     public UserDTO getUserByName(String name){
         return userMapper.getUserByName(name);
     }
@@ -35,15 +36,17 @@ public class UserServiceImpl {
      * @param id
      * @return
      */
+    /*@Override
     public String getNickNameById(@Param("id")Long id){
         return userMapper.getNickNameById(id);
-    }
+    }*/
 
     /**
      * 新增用户，并加密密码
      * @param user
      * @return
      */
+    @Override
     public int addUser(UserDTO user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("ROLE_"+user.getRole());

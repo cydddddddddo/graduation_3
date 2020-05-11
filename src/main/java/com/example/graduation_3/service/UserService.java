@@ -10,8 +10,10 @@ import org.apache.ibatis.annotations.Param;
 
 public interface UserService {
 
-    UserDTO getUserByName(@Param("name")String name);
+    UserDTO getUserByName(String name);
 
-    String getNickNameById(@Param("id")Long id);
+    /*String getNickNameById(Long id);*/
+
+    int addUser(UserDTO user);
 }
 

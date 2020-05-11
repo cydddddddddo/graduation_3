@@ -19,6 +19,15 @@ public class LoginController extends BaseController{
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    /**
+     * security验证登陆后，再验证身份信息、验证码信息等
+     * 并返回相应信息
+     * @param name
+     * @param role
+     * @param code
+     * @param model
+     * @return
+     */
     @RequestMapping("/login")
     @ResponseBody
     public ResultObj login(@RequestParam("name")String name,@RequestParam("role")String role,@RequestParam("code")String code,Model model){
@@ -37,7 +46,15 @@ public class LoginController extends BaseController{
         }
     }
 
-
+    /**
+     * 登陆失败后跳转到此次
+     * 可以返回相应更具体的错误信息
+     * @param name
+     * @param password
+     * @param code
+     * @param role
+     * @return
+     */
     @RequestMapping("login2")
     @ResponseBody
     public ResultObj login2(@RequestParam("name")String name,@RequestParam("password")String password,

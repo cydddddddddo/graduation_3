@@ -23,6 +23,13 @@ public class DataGridView {
         this.count = count;
         this.data = data;
     }
+
+    public DataGridView(String msg,Object data){
+        super();
+        this.msg = msg;
+        this.data = data;
+    }
+
     public DataGridView(Object data) {
         super();
         this.data = data;

@@ -16,6 +16,11 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
+    /**
+     * 新增登陆用户信息
+     * @param user
+     * @return
+     */
     @PostMapping("/addUser")
     public int addUser(@RequestBody UserDTO user){
         return userService.addUser(user);

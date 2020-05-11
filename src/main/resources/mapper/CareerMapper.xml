@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.graduation_3.mapper.CareerMapper">
+
+    <!--<select id="getCareers" resultType="com.example.graduation_3.dto.CareerDTO">
+        SELECT
+            de.id,me.nickName,
+            de.companyName,
+            me.grade,
+            de.position,
+            de.attach
+        FROM
+            democareer  de,
+            member  me
+        WHERE
+            de.userId = me.userId
+        LIMIT
+            ${(page-1)*limit},${limit}
+
+    </select>-->
+
+    <select id="getCareersById" resultType="com.example.graduation_3.dto.CareerDTO">
+        SELECT
+            de.id,me.nickName,
+            de.companyName,
+            me.grade,
+            de.position,
+            de.attach,
+            de.beginYear,
+            de.endYear
+        FROM
+            democareer  de,
+            member  me
+        WHERE
+            de.userId = me.userId
+        AND
+            me.nickName IN
+            (SELECT me.nickName FROM  democareer  de,member  me
+             WHERE de.userId = me.userId AND de.id = #{id})
+        ORDER BY
+            de.beginYear
+        DESC
+    </select>
+
+    <select id="getCareerByUserId" resultType="com.example.graduation_3.dto.CareerDTO">
+        SELECT
+            de.id,me.nickName,
+            de.companyName,
+            me.grade,
+            de.position,
+            de.attach,
+            de.beginYear,
+            de.endYear
+        FROM
+            democareer  de,
+            member  me
+        WHERE
+            de.userId = me.userId
+        AND
+            de.userId = #{userId}
+        ORDER BY
+            de.beginYear
+        DESC
+    </select>
+    
+    <select id="search" resultType="com.example.graduation_3.dto.CareerDTO">
+        SELECT
+            de.id,me.nickName,
+            de.companyName,
+            me.grade,
+            de.position,
+            de.attach,
+            de.beginYear,
+            de.endYear
+        FROM
+            democareer  de,
+            member  me
+        WHERE
+        1=1
+        AND
+            de.userId = me.userId
+        <if test="key!=null">
+        AND
+            CONCAT(de.companyName,me.nickName,IFNULL(me.grade,""),de.position,IFNULL(de.attach,""),de.beginYear,IFNULL(de.endYear,""))
+        LIKE
+            CONCAT('%',#{key},'%')
+        </if>
+		LIMIT
+            ${(page-1)*limit},${limit}
+    </select>
+
+    <select id="getCareerListByUserAndSearch" resultType="com.example.graduation_3.dto.CareerDTO">
+         SELECT
+            de.id,me.nickName,
+            de.companyName,
+            me.grade,
+            de.position,
+            de.attach,
+            de.beginYear,
+            de.endYear
+        FROM
+            democareer  de,
+            member  me
+        WHERE
+        1=1
+        AND
+            de.userId = me.userId
+        <if test="userId!=null">
+        AND
+            de.userId = #{userId}
+        </if>
+        <if test="key!=null">
+        AND
+            CONCAT(de.companyName,me.nickName,IFNULL(me.grade,""),de.position,IFNULL(de.attach,""),de.beginYear,IFNULL(de.endYear,""))
+        LIKE
+            CONCAT('%',#{key},'%')
+        </if>
+		LIMIT
+            ${(page-1)*limit},${limit}
+    </select>
+
+    <insert id="careerAdd">
+        INSERT INTO
+            democareer(companyName,userId,beginYear,endYear,position,attach)
+		VALUES
+			(#{companyName},#{userId},#{beginYear},#{endYear},#{position},#{attach})
+    </insert>
+
+
+    <select id="getCountInSearch" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            democareer  de,
+            member  me
+        WHERE
+            de.userId = me.userId
+        <if test="key!=null">
+        AND
+            CONCAT(de.companyName,me.nickName,IFNULL(me.grade,""),de.position,IFNULL(de.attach,""),de.beginYear,IFNULL(de.endYear,""))
+        LIKE
+            CONCAT('%',#{key},'%')
+        </if>
+
+    </select>
+
+    <select id="getCountByUserAndSearch" resultType="Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        democareer  de,
+        member  me
+        WHERE
+        de.userId = me.userId
+        <if test="userId!=null">
+        AND
+            de.userId = #{userId}
+        </if>
+        <if test="key!=null">
+            AND
+            CONCAT(de.companyName,me.nickName,IFNULL(me.grade,""),de.position,IFNULL(de.attach,""),de.beginYear,IFNULL(de.endYear,""))
+            LIKE
+            CONCAT('%',#{key},'%')
+        </if>
+    </select>
+
+    <delete id="deleteCareerById">
+        DELETE FROM
+            democareer
+        WHERE
+            id = #{id}
+    </delete>
+
+</mapper>

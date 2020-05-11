@@ -18,6 +18,8 @@ public class ResultObj {
     public static final ResultObj  LOGIN_ERROR_CODE=new ResultObj(Constast.ERROR, "登陆失败,验证码错误");
     public static final ResultObj  LOGIN_ERROR_NULL=new ResultObj(Constast.ERROR,"登陆失败，用户未注册");
     public static final ResultObj  LOGIN_ERROR_ROLE=new ResultObj(Constast.ERROR,"登陆失败，请检查身份信息");
+    public static final ResultObj DELETE_SUCCESS=new ResultObj(Constast.OK,"删除成功");
+    public static final ResultObj DELETE_FAILED=new ResultObj(Constast.ERROR,"删除失败");
 
     private Integer code;
     private String msg;

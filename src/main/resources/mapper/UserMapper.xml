@@ -18,13 +18,4 @@
         VALUE
             (#{name},#{password},#{role})
     </insert>
-
-    <select id="getNickNameById" resultType="String">
-        SELECT
-            nickname
-        FROM
-            nick_name
-        WHERE
-            userId = #{id}
-    </select>
 </mapper>
