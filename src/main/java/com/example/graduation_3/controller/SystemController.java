@@ -83,5 +83,26 @@ public class SystemController extends BaseController{
         return "career/square/careerDelete";
     }
 
+    @RequestMapping("exchange/delete")
+    public String toExchangeDelete(Model model){
+        UserDTO user = this.getCurrentUser();
+        MemberDTO member = memberService.getMemberById(user.getId());
+        model.addAttribute("user",user);
+        model.addAttribute("member",member);
+        return "exchange/exchangeDelete";
+    }
 
+    @RequestMapping("exchange/college")
+    public String toExchangeCollege(Model model){
+        UserDTO user = this.getCurrentUser();
+        MemberDTO member = memberService.getMemberById(user.getId());
+        model.addAttribute("user",user);
+        model.addAttribute("member",member);
+        return "exchange/collegeExchange";
+    }
+
+   /* @RequestMapping("sys/toExchange")
+    public String toDemo(Model model){
+        return "list";
+    }*/
 }

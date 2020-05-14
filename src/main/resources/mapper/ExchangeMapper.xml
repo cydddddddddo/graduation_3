@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.graduation_3.mapper.ExchangeMapper">
+    <select id="getExchangeList" resultType="com.example.graduation_3.dto.ExchangeDTO">
+        SELECT
+        	ex.id,
+            ex.userId,
+			ex.receiveGrade,
+			ex.receiveRole,
+			ex.receiveCollege,
+			ex.title,
+			ex.message,
+			ex.sendDate,
+			ex.amendDate,
+			me.nickName
+		FROM
+			exchange ex,
+			member me
+		WHERE
+			ex.userId=me.userId
+		<if test="userId!=null">
+		AND
+			ex.userId=#{userId}
+		</if>
+		AND
+			ex.receiveGrade = #{receiveGrade}
+		AND
+			ex.receiveRole = #{receiveRole}
+		AND
+			ex.receiveCollege = #{receiveCollege}
+		<if test="key!=null">
+		AND
+			CONCAT(ex.receiveGrade,ex.receiveCollege,ex.title,ex.message,IFNULL(ex.sendDate,""))
+		LIKE
+			CONCAT('%',#{key},'%')
+		</if>
+		ORDER BY
+			ex.sendDate
+		DESC
+    </select>
+
+	<select id="getExchangeListByUserId" resultType="com.example.graduation_3.dto.ExchangeDTO">
+		SELECT
+		ex.id,
+		ex.userId,
+		ex.receiveGrade,
+		ex.receiveRole,
+		ex.receiveCollege,
+		ex.title,
+		ex.message,
+		ex.sendDate,
+		ex.amendDate,
+		me.nickName
+		FROM
+		exchange ex,
+		member me
+		WHERE
+		ex.userId=me.userId
+		AND
+		ex.userId=#{userId}
+		<if test="receiveRole!=null">
+		AND
+			ex.receiveRole = #{receiveRole}
+		</if>
+		<if test="key!=null">
+			AND
+			CONCAT(ex.receiveGrade,ex.receiveCollege,ex.title,ex.message,IFNULL(ex.sendDate,""))
+			LIKE
+			CONCAT('%',#{key},'%')
+		</if>
+		ORDER BY
+		ex.sendDate
+		DESC
+		LIMIT
+		${(page-1)*limit},${limit}
+	</select>
+
+	<select id="getExchangeById" resultType="com.example.graduation_3.dto.ExchangeDTO">
+		SELECT
+        	ex.id,
+            ex.userId,
+			ex.receiveGrade,
+			ex.receiveRole,
+			ex.receiveCollege,
+			ex.title,
+			ex.message,
+			ex.sendDate,
+			ex.amendDate,
+			me.nickName
+		FROM
+			exchange ex,
+			member me
+		WHERE
+			ex.userId=me.userId
+		AND
+			ex.id = #{id}
+	</select>
+
+	<select id="getCountByExchangeId" resultType="Long">
+		SELECT
+			COUNT(*)
+		FROM
+			comment
+		WHERE
+			exchangeId = #{exchangeId}
+	</select>
+
+	<insert id="addExchange">
+		INSERT INTO
+			exchange(userId,receiveGrade,receiveRole,receiveCollege,title,message,sendDate)
+		VALUES
+			(#{userId},#{receiveGrade},#{receiveRole},#{receiveCollege}
+			,#{title},#{message},#{sendDate})
+	</insert>
+
+	<delete id="deleteExhcangeById">
+		DELETE FROM
+			exchange
+		WHERE
+			id = #{id}
+	</delete>
+</mapper>

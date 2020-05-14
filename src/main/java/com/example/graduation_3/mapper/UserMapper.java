@@ -27,5 +27,10 @@ public interface UserMapper {
      */
     int addUser(UserDTO user);
 
-    //String getNickNameById(@Param("id")Long id);
+    /**
+     * 通过id获得用户
+     * @param id
+     * @return
+     */
+    UserDTO getUserByid(@Param("id")Long id);
 }

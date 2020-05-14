@@ -11,6 +11,15 @@
             name = #{name}
     </select>
 
+    <select id="getUserByid" resultType="com.example.graduation_3.dto.UserDTO">
+         SELECT
+            id,name,password,role
+        FROM
+            demouser
+        WHERE
+            id = #{id}
+    </select>
+
 
     <insert id="addUser" parameterType="com.example.graduation_3.dto.UserDTO">
         INSERT INTO

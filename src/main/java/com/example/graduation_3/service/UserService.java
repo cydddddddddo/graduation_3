@@ -12,8 +12,8 @@ public interface UserService {
 
     UserDTO getUserByName(String name);
 
-    /*String getNickNameById(Long id);*/
-
     int addUser(UserDTO user);
+
+    UserDTO getUserByid(Long id);
 }
 

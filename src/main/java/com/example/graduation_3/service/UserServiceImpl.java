@@ -32,16 +32,6 @@ public class UserServiceImpl implements UserService{
     }
 
     /**
-     * 通过用户id获得昵称
-     * @param id
-     * @return
-     */
-    /*@Override
-    public String getNickNameById(@Param("id")Long id){
-        return userMapper.getNickNameById(id);
-    }*/
-
-    /**
      * 新增用户，并加密密码
      * @param user
      * @return
@@ -51,5 +41,15 @@ public class UserServiceImpl implements UserService{
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("ROLE_"+user.getRole());
         return userMapper.addUser(user);
+    }
+
+    /**
+     * 通过id获得用户
+     * @param id
+     * @return
+     */
+    @Override
+    public UserDTO getUserByid(Long id) {
+        return userMapper.getUserByid(id);
     }
 }
