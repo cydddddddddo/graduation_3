@@ -2,6 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.graduation_3.mapper.UserMapper">
+<!--
+
+    <resultMap id="com.example.graduation_3.dto.MemberDTO" type="memberResultMap">
+        <id column="id" property="id" />
+        <result column="userId" property="userId"/>
+        <result column="grade" property="grade"/>
+        <result column="college" property="college"/>
+        <result column="synopsis" property="synopsis"/>
+        <result column="email" property="email" />
+        <result column="image" property="image"/>
+        <result column="name" property="account"/>
+        <result column="role" property="role" />
+        <association property="com.example.graduation_3.dto.UserDTO" resultMap="userResultMap"/>
+    </resultMap>
+
+    <resultMap id="com.example.graduation_3.dto.UserDTO" type="userResultMap">
+        <id column="id" property="id"   />
+        <result column="name" property="name"/>
+        <result column="password" property="password"/>
+        <result column="role" property="role"/>
+    </resultMap>
+-->
+
+    <!--<select id="demo" resultMap="memberResultMap">
+        SELECT
+            *
+        FROM
+            demouser de,
+            member me
+        WHERE
+            de.id = me.userId
+        AND
+            de.id = 2;
+    </select>-->
+
+
     <select id="getUserByName" resultType="com.example.graduation_3.dto.UserDTO">
         SELECT
             id,name,password,role
@@ -13,13 +49,12 @@
 
     <select id="getUserByid" resultType="com.example.graduation_3.dto.UserDTO">
          SELECT
-            id,name,password,role
+            id,name,role
         FROM
             demouser
         WHERE
             id = #{id}
     </select>
-
 
     <insert id="addUser" parameterType="com.example.graduation_3.dto.UserDTO">
         INSERT INTO
@@ -27,4 +62,128 @@
         VALUE
             (#{name},#{password},#{role})
     </insert>
+
+    <select id="getUserId" resultType="com.example.graduation_3.dto.UserDTO">
+        SELECT
+            *
+        FROM
+            demouser
+        WHERE
+            name = #{name}
+        AND
+            role = #{role}
+    </select>
+
+    <insert id="addMember" >
+        INSERT INTO
+            member(userId,nickName,grade,college,synopsis,email,image)
+        VALUES
+            (#{userId},#{nickName},#{grade},#{college},#{synopsis},#{email},"face.jpg")
+    </insert>
+
+    <select id="getUserIdByMemberId" resultType="Long">
+        SELECT
+            userId
+        FROM
+            member
+        WHERE
+            id = #{id}
+    </select>
+
+    <update id="changeUser" parameterType="com.example.graduation_3.dto.UserDTO">
+        UPDATE
+            demouser
+        SET
+            password = #{password}
+            ,role = #{role}
+            ,name = #{name}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="getUserList" resultType="com.example.graduation_3.dto.MemberDTO">
+        SELECT
+            id,userId,nickName,grade,college,synopsis,email,image
+        FROM
+            member
+        WHERE
+            1=1
+        <if test="key!=null">
+            AND
+                CONCAT(nickName,IFNULL(synopsis,""),college,IFNULL(grade,""),IFNULL(email,""))
+            LIKE
+                CONCAT('%',#{key},'%')
+        </if>
+        LIMIT
+            ${(page-1)*limit},${limit}
+    </select>
+
+
+    <select id="getCount" resultType="Long">
+        SELECT
+            COUNT(*)
+        FROM
+            member
+        WHERE
+            1=1
+        <if test="key!=null">
+            AND
+                CONCAT(nickName,IFNULL(synopsis,""),college,IFNULL(grade,""),IFNULL(email,""))
+            LIKE
+                CONCAT('%',#{key},'%')
+        </if>
+    </select>
+
+    <update id="amendMember" parameterType="com.example.graduation_3.dto.MemberDTO">
+        UPDATE
+            member
+        SET
+            userId = #{userId}
+        <if test="nickName!=null">
+            ,nickName = #{nickName}
+        </if>
+        <if test="grade!=null">
+            ,grade = #{grade}
+        </if>
+        <if test="college!=null">
+            ,college = #{college}
+        </if>
+        <if test="synopsis!=null">
+            ,synopsis = #{synopsis}
+        </if>
+        <if test="email!=null">
+            ,email = #{email}
+        </if>
+        WHERE
+            userId = #{userId}
+    </update>
+
+    <update id="amendUser" parameterType="com.example.graduation_3.dto.UserDTO">
+        UPDATE
+            demouser
+        SET
+            id = #{id}
+        <if test="name!=null">
+            ,name = #{name}
+        </if>
+        <if test="role!=null">
+            ,role = #{role}
+        </if>
+        WHERE
+            id = #{id}
+    </update>
+
+
+    <delete id="deleteUser">
+        DELETE FROM
+            demouser
+        WHERE
+            id = #{id}
+    </delete>
+    <delete id="deleteMember">
+        DELETE FROM
+            member
+        WHERE
+            id = #{id}
+    </delete>
 </mapper>

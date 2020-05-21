@@ -18,4 +18,8 @@ public interface MemberMapper {
      * @return
      */
     MemberDTO getMemberById(@Param("userId")Long userId);
+
+    Integer amendMember(@Param("email")String email,@Param("synopsis")String synopsis,@Param("userId")Long userId
+                        ,@Param("nickName")String nickName,@Param("grade")String grade,@Param("college")String college
+                        ,@Param("image")String image);
 }

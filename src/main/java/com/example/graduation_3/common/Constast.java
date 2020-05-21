@@ -16,6 +16,9 @@ public interface Constast {
     Integer OK=200;
     Integer ERROR=-1;
 
+    Integer NEW_REAL = 2;
+    Integer PASSWORD_ERR = 3;
+
 
     Integer TYPE_MENU = 1;
     Integer TYPE_PERMISSION = 2;
@@ -26,4 +29,9 @@ public interface Constast {
 
     Integer OPEN_TRUE = 1;
     Integer OPEN_FALSE = 0;
+
+    String IMAGE_GET_PATH = "/resources/images/";
+    String IMAGE_SET_PATH = "D:\\Demo\\graduation_3\\src\\main\\resources\\static\\resources\\images\\";
+
+    String GRAGE_END = "级";
 }

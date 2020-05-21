@@ -101,8 +101,49 @@ public class SystemController extends BaseController{
         return "exchange/collegeExchange";
     }
 
+    @RequestMapping("user/info")
+    public String toUserInfo(Model model){
+        UserDTO user = this.getCurrentUser();
+        MemberDTO member = memberService.getMemberById(user.getId());
+        model.addAttribute("user",user);
+        model.addAttribute("member",member);
+        return "user/customer";
+    }
    /* @RequestMapping("sys/toExchange")
     public String toDemo(Model model){
         return "list";
     }*/
+
+    @RequestMapping("user/upload")
+    public String toUploading(Model model){
+        return "user/upload";
+    }
+
+    @RequestMapping("user/changePwd")
+    public String changePwd(Model model){
+        UserDTO user = this.getCurrentUser();
+        MemberDTO member = memberService.getMemberById(user.getId());
+        model.addAttribute("user",user);
+        model.addAttribute("member",member);
+        return  "user/changePwd";
+    }
+
+    @RequestMapping("career/manage")
+    public String careerManage(Model model){
+        UserDTO user = this.getCurrentUser();
+        MemberDTO member = memberService.getMemberById(user.getId());
+        model.addAttribute("user",user);
+        model.addAttribute("member",member);
+        return "career/manage/careerManage";
+    }
+
+    @RequestMapping("user/manage")
+    public String userManage(Model model){
+        UserDTO user = this.getCurrentUser();
+        MemberDTO member = memberService.getMemberById(user.getId());
+        model.addAttribute("user",user);
+        model.addAttribute("member",member);
+        return "user/userManage";
+    }
+
 }

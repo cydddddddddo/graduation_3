@@ -19,4 +19,9 @@ public class MemberServiceImpl implements MemberService {
     public MemberDTO getMemberById(Long userId) {
         return memberMapper.getMemberById(userId);
     }
+
+    @Override
+    public Integer amendMember(String email, String synopsis, Long userId,String nickName,String grade,String college,String image) {
+        return memberMapper.amendMember(email, synopsis, userId,nickName,grade,college,image);
+    }
 }

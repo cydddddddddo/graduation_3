@@ -50,9 +50,9 @@
                         <span class="fly-list-kiss" th:if="${exchange.getSendRole()}=='ROLE_stu'">学生</span>
                         <span class="fly-list-kiss" th:if="${exchange.getSendRole()}=='ROLE_tea'">教师</span>
                         <span class="fly-list-kiss" th:if="${exchange.getSendRole()}=='ROLE_man'">管理</span>
-<!--
-                        <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>
--->
+                        <!--
+                                                <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>
+                        -->
                         <!--<span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>-->
                         <span class="fly-list-nums">
                 <i class="iconfont icon-pinglun1" title="评论"></i> <a th:text="${exchange.getCommentCount()}"></a>

@@ -1,14 +1,14 @@
 {
-	"cmsName": "layuiCMS后台管理模版",
-	"version": "v2.0",
-	"author": "驊驊龔頾",
+	"cmsName": "毕业生生涯追踪系统",
+	"version": "v1.0",
+	"author": "重庆邮电大学软件工程学院20届毕业生-cy",
 	"homePage": "index.html",
 	"server": "windows",
-	"dataBase": "8.00.2039",
+	"dataBase": "MySQL 5.7.27",
 	"maxUpload": "2M",
-	"userRights": "超级管理员",
-	"description": "这是马哥闲来无事做的一套基于layui的cms模版，纯静态页面，不包含数据库",
-	"powerby": "copyright @2017 驊驊龔頾",
-	"record": "京ICP备14040xxx号-1",
-	"keywords": "layuicms,马哥,layuicms2.0,后台模版,请叫我马哥,驊驊龔頾"
+	"userRights": "管理员",
+	"description": "毕业设计-后端使用Spring boot+SSM-前端使用layui，同时部分引用layuicms模板",
+	"powerby": "copyright @2020 Funny",
+	"record": "渝ICP备xxx号-1",
+	"keywords": "毕业设计,软件工程,layuicms2.0,高校毕业生.生涯追踪系统,Funny"
 }

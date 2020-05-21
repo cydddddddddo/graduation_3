@@ -19,8 +19,11 @@ public interface ExchangeService {
 
     Long addExchange(ExchangeDTO exchange);
 
-    List<ExchangeDTO> getExchangeListByUserId(Long userId,String key,Integer page,Integer limit,String receiveRole);
+    List<ExchangeDTO> getExchangeListByUserId(Long userId,String key,Integer page,Integer limit,String receiveRole,String receiveCollege,String receiveGrade);
 
     void deleteExhcangeById(Long id);
+
+    Long getExchangeCount(Long userId,String key,String receiveRole,String receiveCollege,String receiveGrade);
+
 
 }

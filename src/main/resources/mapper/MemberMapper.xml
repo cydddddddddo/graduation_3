@@ -11,4 +11,25 @@
             userId = #{userId}
     </select>
 
+    <update id="amendMember">
+        UPDATE
+            member
+        SET
+            email = #{email}
+            ,synopsis = #{synopsis}
+        <if test="nickName!=null">
+            ,nickName = #{nickName}
+        </if>
+        <if test="grade!=null">
+            ,grade = #{grade}
+        </if>
+        <if test="college!=null">
+            ,college = #{college}
+        </if>
+        <if test="image!=null">
+            ,image = #{image}
+        </if>
+        WHERE
+            userId = #{userId}
+    </update>
 </mapper>

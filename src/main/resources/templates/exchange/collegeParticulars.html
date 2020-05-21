@@ -32,7 +32,7 @@
                 </div>
                 <div class="detail-about">
                     <a class="fly-avatar" href="../user/home.html">
-                        <img src="/resources/images/face.jpg" alt="贤心">
+                        <img th:src="${member.getImage()}">
                     </a>
                     <div class="fly-detail-user">
                         <a href="../user/home.html" class="fly-link">
@@ -69,7 +69,7 @@
                         <a name="item-1111111111"></a>
                         <div class="detail-about detail-about-reply">
                             <a class="fly-avatar" href="">
-                                <img src="/resources/images/face.jpg" alt=" ">
+                                <img th:src="${member.getImage()}">
                             </a>
                             <div class="fly-detail-user">
                                 <a href="" class="fly-link">

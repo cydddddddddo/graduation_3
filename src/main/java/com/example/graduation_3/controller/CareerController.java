@@ -49,18 +49,38 @@ public class CareerController extends BaseController {
        return new DataGridView(count,list);
     }
 
-
+    /**
+     * 获得可以删除的生涯列表
+     * 其中学生和老师只能删除自己的生涯信息
+     * 而管理员可以删除所有的生涯信息
+     * @param page
+     * @param limit
+     * @param key
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/delete/list")
     public DataGridView getCareerListByUser(@RequestParam("page")Integer page,@RequestParam("limit")Integer limit
             ,String key){
         UserDTO user = this.getCurrentUser();
-        List<CareerDTO> list =  careerService.getCareerListByUserAndSearch(user.getId(), page, limit, key);
-        Long count = Long.valueOf(careerService.getCountByUserAndSearch(user.getId(),key));
+        List<CareerDTO> list = null;
+        Long count = null;
+        if ("ROLE_stu".equals(user.getRole())||"ROLE_tea".equals(user.getRole())){
+            list =  careerService.getCareerListByUserAndSearch(user.getId(), page, limit, key);
+            count = Long.valueOf(careerService.getCountByUserAndSearch(user.getId(),key));
+        }else{
+            list =  careerService.getCareerListByUserAndSearch(null, page, limit, key);
+            count = Long.valueOf(careerService.getCountByUserAndSearch(null,key));
+        }
         return new DataGridView(count,list);
     }
 
-
+    /**
+     * 执行删除，多选单选皆可
+     * @param deletesId
+     * @param model
+     * @return
+     */
     @RequestMapping("/delete/delete")
     @ResponseBody
     public ResultObj deleteCareerList(String deletesId,Model model){

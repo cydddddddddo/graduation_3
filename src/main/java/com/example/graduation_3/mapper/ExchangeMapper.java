@@ -1,6 +1,7 @@
 package com.example.graduation_3.mapper;
 
 import com.example.graduation_3.dto.ExchangeDTO;
+import com.example.graduation_3.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -20,7 +21,9 @@ public interface ExchangeMapper {
                                     ,@Param("receiveCollege")String receiveCollege,@Param("key")String key,@Param("userId")Long userId);
 
     List<ExchangeDTO> getExchangeListByUserId(@Param("userId")Long userId,@Param("key")String key,@Param("page")Integer page
-                            ,@Param("limit")Integer limit,@Param("receiveRole")String receiveRole);
+                            ,@Param("limit")Integer limit,@Param("receiveRole")String receiveRole, @Param("receiveCollege")String receiveCollege,@Param("receiveGrade")String receiveGrade);
+
+    Long getExchangeCount(@Param("userId")Long userId,@Param("key")String key,@Param("receiveRole")String receiveRole,@Param("receiveCollege")String receiveCollege,@Param("receiveGrade")String receiveGrade);
 
     void deleteExhcangeById(@Param("id")Long id);
 

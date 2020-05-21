@@ -10,4 +10,6 @@ import org.apache.ibatis.annotations.Param;
 public interface MemberService {
 
     MemberDTO getMemberById(Long userId);
+
+    Integer amendMember(String email,String synopsis,Long userId,String nickName,String grade,String college,String image);
 }

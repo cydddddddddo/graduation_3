@@ -23,12 +23,18 @@
 		AND
 			ex.userId=#{userId}
 		</if>
-		AND
+		<if test="receiveGrade!=null">
+			AND
 			ex.receiveGrade = #{receiveGrade}
-		AND
+		</if>
+		<if test="receiveRole!=null">
+			AND
 			ex.receiveRole = #{receiveRole}
-		AND
+		</if>
+		<if test="receiveCollege!=null">
+			AND
 			ex.receiveCollege = #{receiveCollege}
+		</if>
 		<if test="key!=null">
 		AND
 			CONCAT(ex.receiveGrade,ex.receiveCollege,ex.title,ex.message,IFNULL(ex.sendDate,""))
@@ -57,11 +63,21 @@
 		member me
 		WHERE
 		ex.userId=me.userId
-		AND
-		ex.userId=#{userId}
+		<if test="userId!=null">
+			AND
+			ex.userId=#{userId}
+		</if>
+		<if test="receiveCollege!=null">
+			AND
+			ex.receiveCollege = #{receiveCollege}
+		</if>
 		<if test="receiveRole!=null">
 		AND
 			ex.receiveRole = #{receiveRole}
+		</if>
+		<if test="receiveGrade!=null">
+			AND
+			ex.receiveGrade = #{receiveGrade}
 		</if>
 		<if test="key!=null">
 			AND
@@ -74,6 +90,38 @@
 		DESC
 		LIMIT
 		${(page-1)*limit},${limit}
+	</select>
+
+	<select id="getExchangeCount" resultType="Long">
+		SELECT
+			COUNT(*)
+		FROM
+		exchange ex,
+		member me
+		WHERE
+		ex.userId=me.userId
+		<if test="userId!=null">
+			AND
+			ex.userId=#{userId}
+		</if>
+		<if test="receiveCollege!=null">
+			AND
+			ex.receiveCollege = #{receiveCollege}
+		</if>
+		<if test="receiveGrade!=null">
+			AND
+			ex.receiveGrade = #{receiveGrade}
+		</if>
+		<if test="receiveRole!=null">
+			AND
+			ex.receiveRole = #{receiveRole}
+		</if>
+		<if test="key!=null">
+			AND
+			CONCAT(ex.receiveGrade,ex.receiveCollege,ex.title,ex.message,IFNULL(ex.sendDate,""))
+			LIKE
+			CONCAT('%',#{key},'%')
+		</if>
 	</select>
 
 	<select id="getExchangeById" resultType="com.example.graduation_3.dto.ExchangeDTO">

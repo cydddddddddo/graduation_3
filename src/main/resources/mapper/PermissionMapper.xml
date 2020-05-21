@@ -11,8 +11,17 @@
             type = #{type}
         AND
             available = 1
+        <if test="percode==1">
         AND
             percode IN (0,#{percode})
+        </if>
+        <if test="percode==2">
+            AND
+            percode IN (0,1,#{percode})
+        </if>
+
+
     </select>
+
 
 </mapper>

@@ -34,4 +34,6 @@ public class ExchangeDTO  implements Serializable {
     private String sendCollege;
     private Long commentCount;
     private String changeDate;
+
+    private MemberDTO member;
 }

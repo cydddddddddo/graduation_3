@@ -99,6 +99,8 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md8 content detail">
             <div class="fly-panel detail-box">
+                <a class="layui-icon layui-icon-prev" th:href="@{/exchange/list}">返回</a>
+                <hr class="layui-bg-green">
                 <h1 th:text="${exchange.getTitle()}"></h1>
                 <div class="fly-detail-info">
                     <!-- <span class="layui-badge">审核中</span> -->
@@ -119,12 +121,12 @@
                     </div>
                     <span class="fly-list-nums">
                         <a href="#comment"><i class="iconfont" title="评论">&#xe60c;</i> <span th:text="${exchange.getCommentCount()}"></span></a>
-                        <i class="layui-icon" title="暂不支持分析，请手动复制链接">&#xe641;</i>
+                        <a class="layui-icon" title="暂不支持分析，请手动复制链接">&#xe641;</a>
                     </span>
                 </div>
                 <div class="detail-about">
                     <a class="fly-avatar" href="../user/home.html">
-                        <img src="/resources/images/face.jpg" alt="贤心">
+                        <img th:src="${exchange.getMember().getImage()}">
                     </a>
                     <div class="fly-detail-user">
                         <a href="../user/home.html" class="fly-link">
@@ -178,7 +180,7 @@
                         <a name="item-1111111111"></a>
                         <div class="detail-about detail-about-reply">
                             <a class="fly-avatar" href="">
-                                <img src="/resources/images/face.jpg" alt=" ">
+                                <img th:src="${comment.getMember().getImage()}" alt=" ">
                             </a>
                             <div class="fly-detail-user">
                                 <a href="" class="fly-link">
@@ -220,6 +222,12 @@
                                 <a th:href="@{/exchange/particulars/delete(exchangeId=${exchange.getId()},commentId=${comment.getId()})}" >删除</a>
                                 <!-- <span class="jieda-accept" type="accept">采纳</span> -->
                             </div>
+                            <div class="jieda-admin" sec:authorize="hasRole('man')">
+                                <!--<span type="edit">编辑</span>-->
+                                <a th:href="@{/exchange/particulars/delete(exchangeId=${exchange.getId()},commentId=${comment.getId()})}" >删除</a>
+                                <!-- <span class="jieda-accept" type="accept">采纳</span> -->
+                            </div>
+                            <!--sec:authorize="hasRole('man')"-->
                         </div>
                     </li>
 

@@ -64,15 +64,15 @@ layui.use(['form','jquery',"layer"],function() {
             title : false,
             type : 1,
             content : '<div class="admin-header-lock" id="lock-box">'+
-                            '<div class="admin-header-lock-img"><img src="/resources/images/face.jpg" class="userAvatar"/></div>'+
-                            '<div class="admin-header-lock-name" id="lockUserName"></div>'+
+                '<div class="admin-header-lock-img"><img src="/resources/images/face.jpg" class="userAvatar"/></div>'+
+                '<div class="admin-header-lock-name" id="lockUserName"></div>'+
 
-                            '<div class="input_btn">'+
-                                '<input type="password" class="admin-header-lock-input layui-input" autocomplete="off" placeholder="请输入密码解锁.." name="lockPwd" id="lockPwd" />'+
-                                '<button class="layui-btn" id="unlock">解锁</button>'+
-                            '</div>'+
-                            '<p>请输入“123456”，否则不会解锁成功哦！！！</p>'+
-                        '</div>',
+                '<div class="input_btn">'+
+                '<input type="password" class="admin-header-lock-input layui-input" autocomplete="off" placeholder="请输入密码解锁.." name="lockPwd" id="lockPwd" />'+
+                '<button class="layui-btn" id="unlock">解锁</button>'+
+                '</div>'+
+                '<p>请输入“123456”，否则不会解锁成功哦！！！</p>'+
+                '</div>',
             closeBtn : 0,
             shade : 0.9,
             success : function(){
@@ -80,7 +80,7 @@ layui.use(['form','jquery',"layer"],function() {
                 if(window.sessionStorage.getItem('userFace') &&  $(".userAvatar").length > 0){
                     $(".userAvatar").attr("src",$(".userAvatar").attr("src").split("/resources/images/")[0] + "/resources/images/" + window.sessionStorage.getItem('userFace').split("images/")[1]);
                 }
-                    /*var nickname = [[${nickname}]];*/
+                /*var nickname = [[${nickname}]];*/
             }
         })
         $(".admin-header-lock-input").focus();
@@ -124,40 +124,40 @@ layui.use(['form','jquery',"layer"],function() {
     })
 
     //功能设定
-    $(".functionSetting").click(function(){
+   /* $(".functionSetting").click(function(){
         layer.open({
             title: "功能设定",
             area: ["380px", "280px"],
             type: "1",
             content :  '<div class="functionSrtting_box">'+
-                            '<form class="layui-form">'+
-                                '<div class="layui-form-item">'+
-                                    '<label class="layui-form-label">开启Tab缓存</label>'+
-                                    '<div class="layui-input-block">'+
-                                        '<input type="checkbox" name="cache" lay-skin="switch" lay-text="开|关">'+
-                                        '<div class="layui-word-aux">开启后刷新页面不关闭打开的Tab页</div>'+
-                                    '</div>'+
-                                '</div>'+
-                                '<div class="layui-form-item">'+
-                                    '<label class="layui-form-label">Tab切换刷新</label>'+
-                                    '<div class="layui-input-block">'+
-                                        '<input type="checkbox" name="changeRefresh" lay-skin="switch" lay-text="开|关">'+
-                                        '<div class="layui-word-aux">开启后切换窗口刷新当前页面</div>'+
-                                    '</div>'+
-                                '</div>'+
-                                '<div class="layui-form-item">'+
-                                    '<label class="layui-form-label">单一登陆</label>'+
-                                    '<div class="layui-input-block">'+
-                                        '<input type="checkbox" name="oneLogin" lay-filter="multipleLogin" lay-skin="switch" lay-text="是|否">'+
-                                        '<div class="layui-word-aux">开启后不可同时多个地方登录</div>'+
-                                    '</div>'+
-                                '</div>'+
-                                '<div class="layui-form-item skinBtn">'+
-                                    '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit="" lay-filter="settingSuccess">设定完成</a>'+
-                                    '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit="" lay-filter="noSetting">朕再想想</a>'+
-                                '</div>'+
-                            '</form>'+
-                        '</div>',
+                '<form class="layui-form">'+
+                '<div class="layui-form-item">'+
+                '<label class="layui-form-label">开启Tab缓存</label>'+
+                '<div class="layui-input-block">'+
+                '<input type="checkbox" name="cache" lay-skin="switch" lay-text="开|关">'+
+                '<div class="layui-word-aux">开启后刷新页面不关闭打开的Tab页</div>'+
+                '</div>'+
+                '</div>'+
+                '<div class="layui-form-item">'+
+                '<label class="layui-form-label">Tab切换刷新</label>'+
+                '<div class="layui-input-block">'+
+                '<input type="checkbox" name="changeRefresh" lay-skin="switch" lay-text="开|关">'+
+                '<div class="layui-word-aux">开启后切换窗口刷新当前页面</div>'+
+                '</div>'+
+                '</div>'+
+                '<div class="layui-form-item">'+
+                '<label class="layui-form-label">单一登陆</label>'+
+                '<div class="layui-input-block">'+
+                '<input type="checkbox" name="oneLogin" lay-filter="multipleLogin" lay-skin="switch" lay-text="是|否">'+
+                '<div class="layui-word-aux">开启后不可同时多个地方登录</div>'+
+                '</div>'+
+                '</div>'+
+                '<div class="layui-form-item skinBtn">'+
+                '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit="" lay-filter="settingSuccess">设定完成</a>'+
+                '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit="" lay-filter="noSetting">朕再想想</a>'+
+                '</div>'+
+                '</form>'+
+                '</div>',
             success : function(index, layero){
                 //如果之前设置过，则设置它的值
                 $(".functionSrtting_box input[name=cache]").prop("checked",cacheStr=="true" ? true : false);
@@ -184,7 +184,7 @@ layui.use(['form','jquery',"layer"],function() {
                 form.render();  //表单渲染
             }
         })
-    })
+    })*/
 
     //判断是否修改过系统基本设置，去显示底部版权信息
     if(window.sessionStorage.getItem("systemParameter")){
@@ -212,19 +212,19 @@ layui.use(['form','jquery',"layer"],function() {
             area : ["310px","160px"],
             type : "1",
             content : '<div class="skins_box">'+
-                            '<form class="layui-form">'+
-                                '<div class="layui-form-item">'+
-                                    '<input type="radio" name="skin" value="默认" title="默认" lay-filter="default" checked="">'+
-                                    '<input type="radio" name="skin" value="橙色" title="橙色" lay-filter="orange">'+
-                                    '<input type="radio" name="skin" value="蓝色" title="蓝色" lay-filter="blue">'+
+                '<form class="layui-form">'+
+                '<div class="layui-form-item">'+
+                '<input type="radio" name="skin" value="默认" title="默认" lay-filter="default" checked="">'+
+                '<input type="radio" name="skin" value="橙色" title="橙色" lay-filter="orange">'+
+                '<input type="radio" name="skin" value="蓝色" title="蓝色" lay-filter="blue">'+
 
-                                '</div>'+
-                                '<div class="layui-form-item skinBtn">'+
-                                    '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit="" lay-filter="changeSkin">确定更换</a>'+
-                                    '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit="" lay-filter="noChangeSkin">朕再想想</a>'+
-                                '</div>'+
-                            '</form>'+
-                        '</div>',
+                '</div>'+
+                '<div class="layui-form-item skinBtn">'+
+                '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit="" lay-filter="changeSkin">确定更换</a>'+
+                '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit="" lay-filter="noChangeSkin">朕再想想</a>'+
+                '</div>'+
+                '</form>'+
+                '</div>',
             success : function(index, layero){
                 var skin = window.sessionStorage.getItem("skin");
                 if(window.sessionStorage.getItem("skinValue")){

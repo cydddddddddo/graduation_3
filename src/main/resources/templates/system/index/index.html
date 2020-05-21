@@ -27,7 +27,7 @@
 					<li class="layui-nav-item layui-this" data-menu="contentManagement">
 						<a href="javascript:;"><i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i><cite>内容管理</cite></a>
 					</li>
-					<li class="layui-nav-item" data-menu="memberCenter" pc>
+					<!--<li class="layui-nav-item" data-menu="memberCenter" pc>
 						<a href="javascript:;"><i class="seraph icon-icon10" data-icon="icon-icon10"></i><cite>用户中心</cite></a>
 					</li>
 					<li class="layui-nav-item" data-menu="systemeSttings" pc sec:authorize="hasRole('man')">
@@ -35,27 +35,21 @@
 					</li>
 					<li class="layui-nav-item" data-menu="seraphApi" pc>
 						<a href="javascript:;"><i class="layui-icon" data-icon="&#xe705;">&#xe705;</i><cite>使用文档</cite></a>
-					</li>
+					</li>-->
 				</ul>
 			    <!-- 顶部右侧菜单 -->
 			    <ul class="layui-nav top_menu">
-					<li class="layui-nav-item" pc>
+					<li class="layui-nav-item">
 						<a href="javascript:;" class="clearCache"><i class="layui-icon" data-icon="&#xe640;">&#xe640;</i><cite>清除缓存</cite><span class="layui-badge-dot"></span></a>
 					</li>
-					<li class="layui-nav-item lockcms" pc>
+					<li class="layui-nav-item lockcms">
 						<a href="javascript:;"><i class="seraph icon-lock"></i><cite>锁屏</cite></a>
 					</li>
 					<li class="layui-nav-item" id="userInfo">
-						<a href="javascript:;"><img src="/resources/images/face.jpg" class="layui-nav-img userAvatar" width="35" height="35"><cite class="adminName" th:text="${member.getNickName()}"></cite></a>
+						<a href="javascript:;"><img th:src="${member.getImage()}" class="layui-nav-img userAvatar" width="35" height="35"><cite class="adminName" th:text="${member.getNickName()}"></cite></a>
 						<dl class="layui-nav-child">
-							<dd><a href="javascript:;" data-url="/resources/page/user/userInfo.html"><i class="seraph icon-ziliao" data-icon="icon-ziliao"></i><cite>个人资料</cite></a></dd>
-							<dd><a href="javascript:;" data-url="/resources/page/user/changePwd.html"><i class="seraph icon-xiugai" data-icon="icon-xiugai"></i><cite>修改密码</cite></a></dd>
-<!--
-							<dd><a href="javascript:;" class="showNotice"><i class="layui-icon">&#xe645;</i><cite>系统公告</cite><span class="layui-badge-dot"></span></a></dd>
--->
-<!--
-							<dd pc><a href="javascript:;" class="functionSetting"><i class="layui-icon">&#xe620;</i><cite>功能设定</cite><span class="layui-badge-dot"></span></a></dd>
--->
+							<dd><a href="javascript:;" data-url="/user/info"><i class="seraph icon-ziliao" data-icon="icon-ziliao"></i><cite>个人资料</cite></a></dd>
+							<dd><a href="javascript:;" data-url="/user/changePwd"><i class="seraph icon-xiugai" data-icon="icon-xiugai"></i><cite>修改密码</cite></a></dd>
 							<dd pc><a href="javascript:;" class="changeSkin"><i class="layui-icon">&#xe61b;</i><cite>更换皮肤</cite></a></dd>
 							<dd><a href="/logout" class="signOut"><i class="seraph icon-tuichu"></i><cite>退出</cite></a></dd>
 						</dl>
@@ -63,21 +57,12 @@
 				</ul>
 			</div>
 		</div>
-		<!-- 左侧导航 -->
-		<!--驊驊龔頾-->
+
 		<div class="layui-side layui-bg-black">
 			<div class="user-photo">
-				<a class="img" title="我的头像" ><img src="/resources/images/face.jpg" class="userAvatar"></a>
+				<a class="img" title="我的头像" ><img th:src="${member.getImage()}" class="userAvatar"></a>
+				<input type="hidden" class="imageSrc" th:value="${member.getImage()}">
 				<p>你好！<span class="userName" th:text="${member.getNickName()}"></span>, 欢迎登录</p>
-			</div>
-			<!-- 搜索 -->
-			<div class="layui-form component">
-				<select name="search" id="search" lay-search lay-filter="searchPage">
-					<option value="">搜索页面或功能</option>
-					<option value="1">layer</option>
-					<option value="2">form</option>
-				</select>
-				<i class="layui-icon">&#xe615;</i>
 			</div>
 			<div class="navBar layui-side-scroll" id="navBar">
 				<ul class="layui-nav layui-nav-tree">
@@ -121,7 +106,152 @@
 	<div class="site-mobile-shade"></div>
 
 	<script type="text/javascript" src="/resources/layui/layui.js"></script>
-	<script type="text/javascript" src="/resources/js/cache.js"></script>
+	<script type="text/javascript">
+		var cacheStr = window.sessionStorage.getItem("cache"),
+				oneLoginStr = window.sessionStorage.getItem("oneLogin");
+
+		layui.use(['form','jquery',"layer"],function() {
+			var form = layui.form,
+					$ = layui.jquery,
+					layer = parent.layer === undefined ? layui.layer : top.layer;
+
+			//判断是否web端打开
+			/*if(!/http(s*):\/\//.test(location.href)){
+				layer.alert("请先将项目部署到 localhost 下再进行访问【建议通过tomcat、webstorm、hb等方式运行，不建议通过iis方式运行】，否则部分数据将无法显示");
+			}else{    //判断是否处于锁屏状态【如果关闭以后则未关闭浏览器之前不再显示】
+				if(window.sessionStorage.getItem("lockcms") != "true" && window.sessionStorage.getItem("showNotice") != "true"){
+					showNotice();
+				}
+			}*/
+
+			//判断是否设置过头像，如果设置过则修改顶部、左侧和个人资料中的头像，否则使用默认头像
+			/*if(window.sessionStorage.getItem('userFace') &&  $(".userAvatar").length > 0){
+				$("#userFace").attr("src",window.sessionStorage.getItem('userFace'));
+				$(".userAvatar").attr("src",$(".userAvatar").attr("src").split("images/")[0] + "images/" + window.sessionStorage.getItem('userFace').split("images/")[1]);
+			}else{
+				$("#userFace").attr("src","/resources/images/face.jpg");
+			}*/
+			//退出
+			$(".signOut").click(function(){
+				window.sessionStorage.removeItem("menu");
+				menu = [];
+				window.sessionStorage.removeItem("curmenu");
+			})
+
+			//判断是否修改过系统基本设置，去显示底部版权信息
+			if(window.sessionStorage.getItem("systemParameter")){
+				systemParameter = JSON.parse(window.sessionStorage.getItem("systemParameter"));
+				$(".footer p span").text(systemParameter.powerby);
+			}
+
+			function skins(){
+				var skin = window.sessionStorage.getItem("skin");
+				if(skin){  //如果更换过皮肤
+					if(window.sessionStorage.getItem("skinValue") != "自定义"){
+						$("body").addClass(window.sessionStorage.getItem("skin"));
+					}else{
+						$(".layui-layout-admin .layui-header").css("background-color",skin.split(',')[0]);
+						$(".layui-bg-black").css("background-color",skin.split(',')[1]);
+						$(".hideMenu").css("background-color",skin.split(',')[2]);
+					}
+				}
+			}
+			skins();
+			$(".changeSkin").click(function(){
+				layer.open({
+					title : "更换皮肤",
+					area : ["310px","160px"],
+					type : "1",
+					content : '<div class="skins_box">'+
+							'<form class="layui-form">'+
+							'<div class="layui-form-item">'+
+							'<input type="radio" name="skin" value="默认" title="默认" lay-filter="default" checked="">'+
+							'<input type="radio" name="skin" value="橙色" title="橙色" lay-filter="orange">'+
+							'<input type="radio" name="skin" value="蓝色" title="蓝色" lay-filter="blue">'+
+
+							'</div>'+
+							'<div class="layui-form-item skinBtn">'+
+							'<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit="" lay-filter="changeSkin">确定更换</a>'+
+							'<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit="" lay-filter="noChangeSkin">朕再想想</a>'+
+							'</div>'+
+							'</form>'+
+							'</div>',
+					success : function(index, layero){
+						var skin = window.sessionStorage.getItem("skin");
+						if(window.sessionStorage.getItem("skinValue")){
+							$(".skins_box input[value="+window.sessionStorage.getItem("skinValue")+"]").attr("checked","checked");
+						};
+						if($(".skins_box input[value=自定义]").attr("checked")){
+							$(".skinCustom").css("visibility","inherit");
+							$(".topColor").val(skin.split(',')[0]);
+							$(".leftColor").val(skin.split(',')[1]);
+							$(".menuColor").val(skin.split(',')[2]);
+						};
+						form.render();
+						$(".skins_box").removeClass("layui-hide");
+						$(".skins_box .layui-form-radio").on("click",function(){
+							var skinColor;
+							if($(this).find("div").text() == "橙色"){
+								skinColor = "orange";
+							}else if($(this).find("div").text() == "蓝色"){
+								skinColor = "blue";
+							}else if($(this).find("div").text() == "默认"){
+								skinColor = "";
+							}
+							if($(this).find("div").text() != "自定义"){
+								$(".topColor,.leftColor,.menuColor").val('');
+								$("body").removeAttr("class").addClass("main_body "+skinColor+"");
+								$(".skinCustom").removeAttr("style");
+								$(".layui-bg-black,.hideMenu,.layui-layout-admin .layui-header").removeAttr("style");
+							}else{
+								$(".skinCustom").css("visibility","inherit");
+							}
+						})
+						var skinStr,skinColor;
+						$(".topColor").blur(function(){
+							$(".layui-layout-admin .layui-header").css("background-color",$(this).val()+" !important");
+						})
+						$(".leftColor").blur(function(){
+							$(".layui-bg-black").css("background-color",$(this).val()+" !important");
+						})
+						$(".menuColor").blur(function(){
+							$(".hideMenu").css("background-color",$(this).val()+" !important");
+						})
+
+						form.on("submit(changeSkin)",function(data){
+							if(data.field.skin != "自定义"){
+								if(data.field.skin == "橙色"){
+									skinColor = "orange";
+								}else if(data.field.skin == "蓝色"){
+									skinColor = "blue";
+								}else if(data.field.skin == "默认"){
+									skinColor = "";
+								}
+								window.sessionStorage.setItem("skin",skinColor);
+							}else{
+								skinStr = $(".topColor").val()+','+$(".leftColor").val()+','+$(".menuColor").val();
+								window.sessionStorage.setItem("skin",skinStr);
+								$("body").removeAttr("class").addClass("main_body");
+							}
+							window.sessionStorage.setItem("skinValue",data.field.skin);
+							layer.closeAll("page");
+						});
+						form.on("submit(noChangeSkin)",function(){
+							$("body").removeAttr("class").addClass("main_body "+window.sessionStorage.getItem("skin")+"");
+							$(".layui-bg-black,.hideMenu,.layui-layout-admin .layui-header").removeAttr("style");
+							skins();
+							layer.closeAll("page");
+						});
+					},
+					cancel : function(){
+						$("body").removeAttr("class").addClass("main_body "+window.sessionStorage.getItem("skin")+"");
+						$(".layui-bg-black,.hideMenu,.layui-layout-admin .layui-header").removeAttr("style");
+						skins();
+					}
+				})
+			})
+		})
+	</script>
 
 	<script type="text/javascript">
 		var $,tab,dataStr,layer;
@@ -270,6 +400,77 @@
 				window.sessionStorage.removeItem("menu");
 				window.sessionStorage.removeItem("curmenu");
 			}
+
+
+
+
+			//锁屏
+			function lockPage(){
+				var imageSrc = $(".imageSrc").val();
+				layer.open({
+					title : false,
+					type : 1,
+					content : '<div class="admin-header-lock" id="lock-box">'+
+							'<div class="admin-header-lock-img"><img src='+imageSrc+' class="userAvatar"/></div>'+
+							'<div class="admin-header-lock-name" id="lockUserName"></div>'+
+
+							'<div class="input_btn">'+
+							'<input type="password" class="admin-header-lock-input layui-input" autocomplete="off" placeholder="请输入密码解锁.." name="lockPwd" id="lockPwd" />'+
+							'<button class="layui-btn" id="unlock">解锁</button>'+
+							'</div>'+
+							'<p>请输入登陆密码，否则不会解锁成功哦！！！</p>'+
+							'</div>',
+					closeBtn : 0,
+					shade : 0.9,
+					success : function(){
+						//判断是否设置过头像，如果设置过则修改顶部、左侧和个人资料中的头像，否则使用默认头像
+						if(window.sessionStorage.getItem('userFace') &&  $(".userAvatar").length > 0){
+							$(".userAvatar").attr("src",$(".userAvatar").attr("src").split("/resources/images/")[0] + "/resources/images/" + window.sessionStorage.getItem('userFace').split("images/")[1]);
+						}
+						/*var nickname = [[${nickname}]];*/
+					}
+				})
+				$(".admin-header-lock-input").focus();
+			}
+			$(".lockcms").on("click",function(){
+				window.sessionStorage.setItem("lockcms",true);
+				lockPage();
+			})
+			// 判断是否显示锁屏
+			if(window.sessionStorage.getItem("lockcms") == "true"){
+				lockPage();
+			}
+			// 解锁
+			$("body").on("click","#unlock",function(){
+				if($(this).siblings(".admin-header-lock-input").val() == ''){
+					layer.msg("请输入解锁密码！");
+					$(this).siblings(".admin-header-lock-input").focus();
+				}else{
+					$.post("/user/verify",{
+						password :$(this).siblings(".admin-header-lock-input").val()
+					},function (data) {
+						if (data.code==200){
+							window.sessionStorage.setItem("lockcms",false);
+							$(this).siblings(".admin-header-lock-input").val('');
+							layer.closeAll("page");
+						}else {
+							layer.msg("密码错误，请重新输入！");
+							$(this).siblings(".admin-header-lock-input").val('').focus();
+						}
+					})
+					/*if($(this).siblings(".admin-header-lock-input").val() == "123456"){
+
+					}else{
+
+					}*/
+				}
+			});
+			$(document).on('keydown', function(event) {
+				var event = event || window.event;
+				if(event.keyCode == 13) {
+					$("#unlock").click();
+				}
+			});
 		})
 
 		//打开新窗口
@@ -277,22 +478,9 @@
 			tab.tabAdd(_this);
 		}
 
-		//捐赠弹窗
-		function donation(){
-			layer.tab({
-				area : ['260px', '367px'],
-				tab : [{
-					title : "微信",
-					content : "<div style='padding:30px;overflow:hidden;background:#d2d0d0;'><img src='images/wechat.jpg'></div>"
-				},{
-					title : "支付宝",
-					content : "<div style='padding:30px;overflow:hidden;background:#d2d0d0;'><img src='images/alipay.jpg'></div>"
-				}]
-			})
-		}
 
 		//图片管理弹窗
-		function showImg(){
+		/*function showImg(){
 			$.getJSON('json/images.json', function(json){
 				var res = json;
 				layer.photos({
@@ -300,7 +488,7 @@
 					anim: 5
 				});
 			});
-		}
+		}*/
 	</script>
 </body>
 </html>

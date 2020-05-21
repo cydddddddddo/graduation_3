@@ -45,6 +45,9 @@ public class ExchangeController extends BaseController {
 
     /**
      * 获得帖子列表
+     * 学生只能获得他所在年级、所在学院、发给学生的帖子
+     * 而老师可以获得所在年级、所在学院，发给学生、老师、管理的帖子
+     * 而管理可以获得所有的帖子
      * @param key
      * @param model
      * @return
@@ -53,10 +56,21 @@ public class ExchangeController extends BaseController {
     public String toExchangeList(String key,Model model){
         UserDTO tempU = null;
         MemberDTO tempM = null;
+        List<ExchangeDTO> list = null;
         UserDTO user = this.getCurrentUser();
         MemberDTO member = memberService.getMemberById(user.getId());
-        List<ExchangeDTO> list = exchangeService.getExchangeList(member.getGrade(),user.getRole()
-                                                        ,member.getCollege(),null,null);
+        if ("ROLE_stu".equals(user.getRole())){
+            list = exchangeService.getExchangeList(member.getGrade(),user.getRole()
+                    ,member.getCollege(),null,null);
+        }else if ("ROLE_tea".equals(user.getRole())){
+            list = exchangeService.getExchangeList(member.getGrade(),null
+                    ,member.getCollege(),null,null);
+        }else {
+            list = exchangeService.getExchangeList(null,null
+                    ,null,null,null);
+        }
+
+
         for (ExchangeDTO e :
                 list) {
             tempU = userService.getUserByid(e.getUserId());
@@ -65,6 +79,8 @@ public class ExchangeController extends BaseController {
             e.setSendCollege(tempM.getCollege());
             e.setSendGrade(tempM.getGrade());
             e.setSendRole(tempU.getRole());
+            //这里是代价
+            e.setMember(tempM);
         }
         model.addAttribute("user",user);
         model.addAttribute("member",member);
@@ -73,20 +89,29 @@ public class ExchangeController extends BaseController {
     }
 
     /**
-     * 因为8知道如何利用数据重新加载页面
-     * 所以干脆直接重新进入这个页面
+     * 此处唯一的区别是学生老师可以获得不同年级的帖子
      * @param key
      * @param model
      * @return
      */
-    @RequestMapping("/search/{key}")
-    public String search(@PathVariable String key,Model model){
+    @RequestMapping("/friendExchange")
+    public String friendsExchange(String key,Model model){
         UserDTO tempU = null;
         MemberDTO tempM = null;
+        List<ExchangeDTO> list = null;
         UserDTO user = this.getCurrentUser();
         MemberDTO member = memberService.getMemberById(user.getId());
-        List<ExchangeDTO> list = exchangeService.getExchangeList(member.getGrade(),user.getRole()
-                ,member.getCollege(),key,null);
+        if ("ROLE_stu".equals(user.getRole())){
+            list = exchangeService.getExchangeList(null,user.getRole()
+                    ,member.getCollege(),null,null);
+        }else if ("ROLE_tea".equals(user.getRole())){
+            list = exchangeService.getExchangeList(null,null
+                    ,member.getCollege(),null,null);
+        }else {
+            list = exchangeService.getExchangeList(null,null
+                    ,null,null,null);
+        }
+
         for (ExchangeDTO e :
                 list) {
             tempU = userService.getUserByid(e.getUserId());
@@ -95,6 +120,51 @@ public class ExchangeController extends BaseController {
             e.setSendCollege(tempM.getCollege());
             e.setSendGrade(tempM.getGrade());
             e.setSendRole(tempU.getRole());
+            //这里是代价
+            e.setMember(tempM);
+        }
+        model.addAttribute("user",user);
+        model.addAttribute("member",member);
+        model.addAttribute("exchangelist",list);
+        return "exchange/friendsExchange";
+    }
+
+    /**
+     * 因为8知道如何利用数据重新加载页面
+     * 所以干脆直接重新进入这个页面
+     * 即搜索后返回新的内容
+     * @param key
+     * @param model
+     * @return
+     */
+    @RequestMapping("/search/{key}")
+    public String search(@PathVariable String key,Model model){
+        UserDTO tempU = null;
+        MemberDTO tempM = null;
+        List<ExchangeDTO> list = null;
+        UserDTO user = this.getCurrentUser();
+        MemberDTO member = memberService.getMemberById(user.getId());
+        if ("ROLE_stu".equals(user.getRole())){
+            list = exchangeService.getExchangeList(member.getGrade(),user.getRole()
+                    ,member.getCollege(),key,null);
+        }else if ("ROLE_tea".equals(user.getRole())){
+            list = exchangeService.getExchangeList(member.getGrade(),null
+                    ,member.getCollege(),key,null);
+        }else {
+            list = exchangeService.getExchangeList(null,null
+                    ,null,key,null);
+        }
+
+        for (ExchangeDTO e :
+                list) {
+            tempU = userService.getUserByid(e.getUserId());
+            tempM = memberService.getMemberById(e.getUserId());
+            e.setCommentCount(exchangeService.getCountByExchangeId(e.getId()));
+            e.setSendCollege(tempM.getCollege());
+            e.setSendGrade(tempM.getGrade());
+            e.setSendRole(tempU.getRole());
+            //代价
+            e.setMember(tempM);
         }
         model.addAttribute("user",user);
         model.addAttribute("member",member);
@@ -103,6 +173,12 @@ public class ExchangeController extends BaseController {
     }
 
 
+    /**
+     * 新增帖子
+     * @param exchange
+     * @param model
+     * @return
+     */
     @RequestMapping("/add")
     public String add(ExchangeDTO exchange,Model model){
         UserDTO user = this.getCurrentUser();
@@ -116,7 +192,11 @@ public class ExchangeController extends BaseController {
             }
             //写入
              Long num = exchangeService.addExchange(exchange);
-            return this.toExchangeList(null,model);
+                  if ("exchange/exchangeList".equals(this.toExchangeList(null,model))){
+                      return "exchange/collegeExchange";
+                  }else {
+                      return "exchange/exchangeAdd";
+                  }
         }else {
             model.addAttribute("user",user);
             model.addAttribute("member",member);
@@ -124,6 +204,12 @@ public class ExchangeController extends BaseController {
         }
     }
 
+    /**
+     * 进入帖子详情
+     * @param exchangeId
+     * @param model
+     * @return
+     */
     @RequestMapping("/particulars")
     public String toParticulars(@RequestParam Long exchangeId, Model model){
 
@@ -135,6 +221,9 @@ public class ExchangeController extends BaseController {
         exchange.setSendGrade(tempM.getGrade());
         exchange.setSendRole(tempU.getRole());
 
+        //代价
+        exchange.setMember(tempM);
+
         List<CommentDTO> list = commentService.getCommentListByExchangeId(exchangeId);
         for (CommentDTO c :
                 list) {
@@ -155,6 +244,12 @@ public class ExchangeController extends BaseController {
 
     }
 
+    /**
+     * 获得帖子中的评论
+     * @param exchangeId
+     * @param model
+     * @return
+     */
     @RequestMapping("/particulars/{exchangeId}")
     public String toParticulars_2(@PathVariable Long exchangeId, Model model){
 
@@ -166,6 +261,9 @@ public class ExchangeController extends BaseController {
         exchange.setSendGrade(tempM.getGrade());
         exchange.setSendRole(tempU.getRole());
 
+        //代价
+        exchange.setMember(tempM);
+
         List<CommentDTO> list = commentService.getCommentListByExchangeId(exchangeId);
         for (CommentDTO c :
                 list) {
@@ -186,7 +284,14 @@ public class ExchangeController extends BaseController {
 
     }
 
-
+    /**
+     * 新增评论
+     * @param content
+     * @param userId
+     * @param exchangeId
+     * @param model
+     * @return
+     */
     @RequestMapping("/particulars/add")
     public String addParticulars(String content,Long userId,Long exchangeId,Model model){
         Timestamp sendDate = new Timestamp(System.currentTimeMillis());
@@ -199,6 +304,13 @@ public class ExchangeController extends BaseController {
         }
     }
 
+    /**
+     * 删除评论
+     * @param exchangeId
+     * @param commentId
+     * @param model
+     * @return
+     */
     @RequestMapping("/particulars/delete")
     public String deleteParticulars(Long exchangeId,Long commentId,Model model){
         int num = commentService.deleteComment(commentId);
@@ -209,15 +321,32 @@ public class ExchangeController extends BaseController {
         }
     }
 
+    /**
+     * 管理帖子列表
+     * 只有管理有权限
+     * @param page
+     * @param limit
+     * @param key
+     * @param model
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/delete/list")
     public DataGridView getExchangeByUserId(@RequestParam("page")Integer page,@RequestParam("limit")Integer limit
             ,String key,Model model){
-
+        List<ExchangeDTO> list = null;
+        Long count = 0L;
         UserDTO user = this.getCurrentUser();
         MemberDTO member = memberService.getMemberById(user.getId());
+        if (!"ROLE_man".equals(user.getRole())){
+            list = exchangeService.getExchangeListByUserId(user.getId(),key,page,limit,null,null,null);
+            count = exchangeService.getExchangeCount(user.getId(),key,null,null,null);
+        }else {
+            list = exchangeService.getExchangeListByUserId(null,key,page,limit,null,null,null);
+            count = exchangeService.getExchangeCount(null,key,null,null,null);
 
-        List<ExchangeDTO> list = exchangeService.getExchangeListByUserId(user.getId(),key,page,limit,null);
+        }
+
         for (ExchangeDTO e :
                 list) {
             e.setCommentCount(exchangeService.getCountByExchangeId(e.getId()));
@@ -233,7 +362,7 @@ public class ExchangeController extends BaseController {
                     Locale.CHINESE);
             e.setChangeDate( sdf.format(e.getSendDate()));
         }
-        return new DataGridView(list);
+        return new DataGridView(count,list);
     }
 
     @RequestMapping("/delete/delete")
@@ -257,11 +386,21 @@ public class ExchangeController extends BaseController {
     @RequestMapping("/college/list")
     public DataGridView getExchangeByUserIdAndReceiveCollege(@RequestParam("page")Integer page,@RequestParam("limit")Integer limit
             ,String key,Model model){
-
+        List<ExchangeDTO> list = null;
+        Long count = 0L;
         UserDTO user = this.getCurrentUser();
         MemberDTO member = memberService.getMemberById(user.getId());
+        if ("ROLE_stu".equals(user.getRole())){
+            list = exchangeService.getExchangeListByUserId(user.getId(),key,page,limit,"ROLE_tea",null,null);
+            count = exchangeService.getExchangeCount(user.getId(),key,"ROLE_tea",null,null);
+        }else if("ROLE_tea".equals(user.getRole())){
+            list = exchangeService.getExchangeListByUserId(null,key,page,limit,"ROLE_tea",member.getCollege(),member.getGrade());
+            count = exchangeService.getExchangeCount(null,key,"ROLE_tea",member.getCollege(),member.getGrade());
 
-        List<ExchangeDTO> list = exchangeService.getExchangeListByUserId(user.getId(),key,page,limit,"ROLE_tea");
+        }else {
+            list = exchangeService.getExchangeListByUserId(null,key,page,limit,"ROLE_tea",null,null);
+            count = exchangeService.getExchangeCount(null,key,"ROLE_tea",null,null);
+        }
         for (ExchangeDTO e :
                 list) {
             e.setCommentCount(exchangeService.getCountByExchangeId(e.getId()));
@@ -271,9 +410,6 @@ public class ExchangeController extends BaseController {
                     Locale.CHINESE);
             e.setChangeDate( sdf.format(e.getSendDate()));
         }
-        return new DataGridView(list);
+        return new DataGridView(count,list);
     }
-
-
-
 }
