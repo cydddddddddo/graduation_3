@@ -85,7 +85,8 @@ public class UserController extends BaseController {
             String image = UploadUtil.uploadFile(file, Constast.IMAGE_SET_PATH, user.getId());
 
             System.out.println(image);
-            ResultObj resultObj = this.amendMember(user.getId(), member.getEmail(), member.getSynopsis(), null, null
+            ResultObj resultObj = this.amendMember(user.getId(), member.getEmail()
+                        , member.getSynopsis(), null, null
                     , null, image, model);
             if (resultObj.equals(ResultObj.AMEND_SUCCESS)) {
                 return new DataGridView(image);
@@ -93,8 +94,7 @@ public class UserController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return null;
+        return new DataGridView("err");
     }
 
     /**

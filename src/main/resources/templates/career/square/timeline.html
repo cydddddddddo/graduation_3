@@ -16,7 +16,8 @@
     </legend>
     <a class="layui-icon layui-icon-prev" th:if="${careerList.get(0).getNickName()}!=${member.getNickName()}"
        th:href="@{/career/toCareerSquare}" style="margin-left: 2%">返回</a>
-    <a class="layui-icon layui-icon-add-1 addCareer_btn" id="dmxy" th:if="${careerList.get(0).getNickName()}==${member.getNickName()}"
+    <a class="layui-icon layui-icon-add-1 addCareer_btn" id="dmxy"
+       th:if="${careerList.get(0).getNickName()}==${member.getNickName()}"
        th:href="@{/career/toCareerSquare/add}" style="margin-left: 2%">新增</a>
     <a class="layui-icon layui-icon-delete" th:if="${careerList.get(0).getNickName()}==${member.getNickName()}"
        th:href="@{/career/toCareerDelete}" style="margin-left: 2%">删除</a>

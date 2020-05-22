@@ -109,15 +109,8 @@ public class SystemController extends BaseController{
         model.addAttribute("member",member);
         return "user/customer";
     }
-   /* @RequestMapping("sys/toExchange")
-    public String toDemo(Model model){
-        return "list";
-    }*/
 
-    @RequestMapping("user/upload")
-    public String toUploading(Model model){
-        return "user/upload";
-    }
+
 
     @RequestMapping("user/changePwd")
     public String changePwd(Model model){

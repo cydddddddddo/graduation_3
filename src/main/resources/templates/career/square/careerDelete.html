@@ -64,15 +64,6 @@
         });
 
 
-        /*table.on('rowDouble(careerList)',function (obj) {
-            window.location = "/career/timeline/"+obj.data.id;
-        })*/
-
-
-        /*var checkStatus = table.checkStatus("careerListTable");
-        alert(checkStatus.data.length);*/
-
-
         //搜索
         $(".search_btn").on("click",function(){
             if($(".searchVal").val() != ''){
@@ -100,7 +91,9 @@
                     deleteId.push(data[i].id);
                 }
                 var deletesId =""+deleteId;
-                layer.confirm('确定删除选中的文章？', {icon: 3, title: '提示信息'}, function (index) {
+                layer.confirm('确定删除选中的文章？',
+                    {icon: 3, title: '提示信息'},
+                    function (index) {
                     $.post("/career/delete/delete",{
                         deletesId : deletesId
                     },function(data){

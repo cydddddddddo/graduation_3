@@ -58,10 +58,6 @@
                 <i class="iconfont icon-pinglun1" title="评论"></i> <a th:text="${exchange.getCommentCount()}"></a>
               </span>
                     </div>
-                    <!--<div class="fly-list-badge">
-                        <span class="layui-badge layui-bg-black">置顶</span>
-                        &lt;!&ndash;<span class="layui-badge layui-bg-red">精帖</span>&ndash;&gt;
-                    </div>-->
                 </li>
             </ul>
         </div>
@@ -85,20 +81,8 @@
         $(".search_btn").on("click",function(){
             if($(".searchVal").val() != ''){
                 var key = $(".searchVal").val();
-                // alert($(".searchVal").val());
-                /*table.reload("careerListTable",{
-                    page: {
-                        curr: 1 //重新从第 1 页开始
-                    },
-                    where: {
-                        key: $(".searchVal").val() //搜索的关键字
-                    }
-                })*/
 
                 window.location.href="/exchange/search/"+key;
-                // $.post("/exchange/list",
-                //     {key:key}
-                // )
             }else{
                 layer.msg("请输入搜索的内容");
             }

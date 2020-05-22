@@ -91,7 +91,13 @@ public class CareerController extends BaseController {
                 array[i] = Long.parseLong(arrs[i]);
             }
             for (int i = 0; i < array.length; i++) {
-                careerService.deleteCareerById(array[i]);
+                try{
+                    careerService.deleteCareerById(array[i]);
+                }catch (Exception e){
+                    System.out.println("删除生涯数据异常");
+                    e.printStackTrace();
+                    return ResultObj.DELETE_FAILED;
+                }
             }
             return ResultObj.DELETE_SUCCESS;
         }
@@ -137,9 +143,11 @@ public class CareerController extends BaseController {
         model.addAttribute("user",user);
         model.addAttribute("member",member);
 
-        if (null!=career.getCompanyName()&&null!=career.getBeginYear()&&null!=career.getPosition()){
-            int num = careerService.careerAdd(career.getCompanyName(),user.getId(),career.getBeginYear()
-                    ,career.getEndYear(),career.getPosition(),career.getAttach());
+        if (null!=career.getCompanyName()&&null!=career.getBeginYear()
+                &&null!=career.getPosition()){
+            int num = careerService.careerAdd(career.getCompanyName(),user.getId()
+                    ,career.getBeginYear(),career.getEndYear()
+                    ,career.getPosition(),career.getAttach());
 
             list = careerService.getCareerByUserId(user.getId());
             model.addAttribute("careerList",list);

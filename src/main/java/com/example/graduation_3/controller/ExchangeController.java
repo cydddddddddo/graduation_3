@@ -181,6 +181,7 @@ public class ExchangeController extends BaseController {
      */
     @RequestMapping("/add")
     public String add(ExchangeDTO exchange,Model model){
+        Long num = 0L;
         UserDTO user = this.getCurrentUser();
         MemberDTO member = memberService.getMemberById(user.getId());
         if (exchange.getTitle()!=null){
@@ -191,9 +192,9 @@ public class ExchangeController extends BaseController {
                 exchange.setReceiveGrade(exchange.getReceiveGrade()+"级");
             }
             //写入
-             Long num = exchangeService.addExchange(exchange);
-                  if ("exchange/exchangeList".equals(this.toExchangeList(null,model))){
-                      return "exchange/collegeExchange";
+             num = exchangeService.addExchange(exchange);
+                  if (num!=0){
+                      return "exchange/exchangeDelete";
                   }else {
                       return "exchange/exchangeAdd";
                   }
@@ -323,7 +324,6 @@ public class ExchangeController extends BaseController {
 
     /**
      * 管理帖子列表
-     * 只有管理有权限
      * @param page
      * @param limit
      * @param key

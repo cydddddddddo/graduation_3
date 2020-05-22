@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Random;
 
 /**
+ * 将文件重命名并存放至指定路径
+ * 返回最终名称
  * @author Cy
  * @data 2020/5/14 - 21:43
  */
@@ -18,9 +20,6 @@ public class UploadUtil {
         String indexName = ""+userId + "imageface";
         String fileName = indexName + suffixName;
         File tempFile = new File(path,fileName);
-        /*if (!tempFile.getParentFile().exists()){
-            tempFile.getParentFile().mkdir();
-        }*/
         if (tempFile.exists()){
             tempFile.delete();
         }
